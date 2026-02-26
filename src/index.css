@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+    --color-brand-primary: #0000bf;
+    --color-brand-secondary: #00005e;
+    --color-accent: #ff4d00;
+}
+
+:root {
+    font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+    line-height: 1.5;
+    font-weight: 400;
+
+    color-scheme: light;
+    color: #1a1a2e;
+    background: #f8f9fc;
+
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    place-items: center;
+    min-width: 320px;
+    min-height: 100vh;
+}
+
+#root {
+    width: 100%;
+}
+
+/* Global text overflow fix */
+p,
+span,
+div,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+li,
+td,
+th {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+@utility glass {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.06);
+}
+
+.mesh-bg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    background-color: #f8f9fc;
+    background-image:
+        radial-gradient(at 0% 0%, hsla(220, 60%, 97%, 1) 0, transparent 50%),
+        radial-gradient(at 50% 0%, hsla(220, 50%, 94%, 1) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(240, 40%, 96%, 1) 0, transparent 50%);
+}
+
+.h1 {
+    @apply text-4xl md:text-6xl font-bold tracking-tight text-slate-900;
+}
+
+.btn-primary {
+    @apply px-8 py-3 bg-brand-primary text-white font-semibold rounded-full hover:bg-brand-secondary transition-all duration-300 shadow-lg;
+}
+
+.card {
+    @apply glass rounded-2xl p-6 transition-all duration-300;
+}
+
+/* Resume template text overflow fix */
+.resume-template p,
+.resume-template span,
+.resume-template div {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-word;
+}
