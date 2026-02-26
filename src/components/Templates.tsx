@@ -17,6 +17,17 @@ interface TemplateProps {
 const templateRoot = "bg-white w-full min-h-[297mm] shadow-2xl shrink-0 overflow-hidden";
 const textSafe = "break-words overflow-hidden";
 
+/** Translate proficiency key (stored in English) to the current resume language */
+const proficiencyLabel = (key: string, t: any): string => {
+  const map: Record<string, string> = {
+    'Basic': t.basic || key,
+    'Intermediate': t.intermediate || key,
+    'Fluent': t.fluent || key,
+    'Native': t.native || key,
+  };
+  return map[key] || key;
+};
+
 export const ModernTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-16 font-sans text-neutral-800`}>
     <div className={`border-b-4 border-neutral-900 pb-8 mb-10 flex flex-wrap justify-between items-start gap-4 ${textSafe}`}>
@@ -103,7 +114,7 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
                 <div key={lang.id}>
                   <div className="flex justify-between text-sm mb-1">
                     <span className={`font-bold text-neutral-800 ${textSafe}`}>{lang.language}</span>
-                    <span className="text-neutral-400 text-xs font-bold uppercase">{lang.proficiency}</span>
+                    <span className="text-neutral-400 text-xs font-bold uppercase">{proficiencyLabel(lang.proficiency, t)}</span>
                   </div>
                   <div className="w-full bg-neutral-100 h-1 rounded-full overflow-hidden">
                     <div
@@ -170,7 +181,7 @@ export const CreativeTemplate = ({ personalInfo, summary, education, experience,
             {languages.map(lang => (
               <div key={lang.id} className="text-sm">
                 <div className={`font-bold ${textSafe}`}>{lang.language}</div>
-                <div className="text-[10px] uppercase text-neutral-500">{lang.proficiency}</div>
+                <div className="text-[10px] uppercase text-neutral-500">{proficiencyLabel(lang.proficiency, t)}</div>
               </div>
             ))}
           </div>
@@ -291,7 +302,7 @@ export const MinimalTemplate = ({ personalInfo, summary, education, experience, 
             <div className="space-y-1">
               {languages.map(lang => (
                 <div key={lang.id} className={`text-sm font-medium ${textSafe}`}>
-                  {lang.language} <span className="text-neutral-400 font-normal">({lang.proficiency})</span>
+                  {lang.language} <span className="text-neutral-400 font-normal">({proficiencyLabel(lang.proficiency, t)})</span>
                 </div>
               ))}
             </div>
@@ -312,7 +323,7 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
         <div className="min-w-0">
           <h1 className={`text-3xl font-bold text-neutral-900 mb-2 ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
           <div className={`text-brand-600 font-bold uppercase tracking-widest text-sm ${textSafe}`}>
-            {experience[0]?.position || 'Professional'}
+            {experience[0]?.position || t.professional || 'Professional'}
           </div>
         </div>
       </div>
@@ -353,7 +364,7 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
               {languages.map(lang => (
                 <div key={lang.id} className="text-sm">
                   <div className={`font-bold ${textSafe}`}>{lang.language}</div>
-                  <div className="text-neutral-400 text-xs">{lang.proficiency}</div>
+                  <div className="text-neutral-400 text-xs">{proficiencyLabel(lang.proficiency, t)}</div>
                 </div>
               ))}
             </div>
@@ -466,7 +477,7 @@ export const AtsTemplate = ({ personalInfo, summary, education, experience, skil
         <div>
           <h2 className="text-lg font-bold border-b border-black uppercase mb-3 tracking-widest">{t.languages}</h2>
           <p className={`text-sm leading-relaxed ${textSafe}`}>
-            {languages.map(l => `${l.language} (${l.proficiency})`).join(', ')}
+            {languages.map(l => `${l.language} (${proficiencyLabel(l.proficiency, t)})`).join(', ')}
           </p>
         </div>
       )}
@@ -659,7 +670,7 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
               {languages.map(lang => (
                 <div key={lang.id} className="text-[11px] flex justify-between">
                   <span className={`font-bold ${textSafe}`}>{lang.language}</span>
-                  <span className="text-neutral-400">{lang.proficiency}</span>
+                  <span className="text-neutral-400">{proficiencyLabel(lang.proficiency, t)}</span>
                 </div>
               ))}
             </div>
@@ -702,7 +713,7 @@ export const SidebarLightTemplate = ({ personalInfo, summary, education, experie
             {languages.map(lang => (
               <div key={lang.id}>
                 <div className={`text-xs font-bold text-neutral-800 ${textSafe}`}>{lang.language}</div>
-                <div className="text-[10px] text-neutral-400 uppercase">{lang.proficiency}</div>
+                <div className="text-[10px] text-neutral-400 uppercase">{proficiencyLabel(lang.proficiency, t)}</div>
               </div>
             ))}
           </div>
