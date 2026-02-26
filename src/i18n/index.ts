@@ -79,6 +79,7 @@ export const translations = {
     privacyFirst: "Privacy First",
     multiLanguage: "Multilingual Support",
     multiLanguageDesc: "Full support for Finnish, English, Arabic, Somali (and more) resume creation.",
+    relevantExperience: "Relevant experiences highlighted for every age.",
     // Skills categories
     skillCategories: {
       technical: "Technical",
@@ -179,6 +180,7 @@ export const translations = {
     privacyFirst: "Yksityisyys ensin",
     multiLanguage: "Monikielinen tuki",
     multiLanguageDesc: "Täysi tuki suomen, englannin, arabian, somalin (ja muiden) ansioluetteloille.",
+    relevantExperience: "Asiaankuuluvat kokemukset korostettu jokaiselle iälle.",
     // Skills categories
     skillCategories: {
       technical: "Tekniset",

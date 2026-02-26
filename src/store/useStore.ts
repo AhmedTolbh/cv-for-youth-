@@ -49,7 +49,7 @@ interface ResumeState {
   hobbies: string[];
   languages: LanguageSkill[];
   template: string;
-  
+
   setAppLanguage: (lang: Language) => void;
   setResumeLanguage: (lang: Language) => void;
   setAgeGroup: (group: AgeGroup) => void;
@@ -93,7 +93,7 @@ const initialState = {
 
 export const useStore = create<ResumeState>((set) => ({
   ...initialState,
-  setAppLanguage: (lang) => set({ appLanguage: lang }),
+  setAppLanguage: (lang) => set({ appLanguage: lang, resumeLanguage: lang }),
   setResumeLanguage: (lang) => set({ resumeLanguage: lang }),
   setAgeGroup: (group) => set({ ageGroup: group }),
   updatePersonalInfo: (info) => set((state) => ({ personalInfo: { ...state.personalInfo, ...info } })),

@@ -777,6 +777,7 @@ export const HighContrastTemplate = ({ personalInfo, summary, education, experie
         <img src={personalInfo.photo} alt="Profile" className="w-28 h-28 object-cover border-4 border-black grayscale contrast-125 shrink-0" />
       )}
     </div>
+
     <div className="space-y-10">
       {summary && (
         <div>
@@ -784,47 +785,79 @@ export const HighContrastTemplate = ({ personalInfo, summary, education, experie
           <p className={`text-base leading-tight ${textSafe}`}>{summary}</p>
         </div>
       )}
-      {experience.length > 0 && (
-        <div>
-          <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.experience}</h2>
-          <div className="space-y-6">
-            {experience.map(exp => (
-              <div key={exp.id}>
-                <div className="flex flex-wrap justify-between font-black text-lg mb-1 gap-2">
-                  <span className={textSafe}>{exp.position}</span>
-                  <span className="whitespace-nowrap">{exp.startDate} &gt; {exp.endDate}</span>
-                </div>
-                <div className={`font-bold mb-3 uppercase tracking-widest underline ${textSafe}`}>{exp.company}</div>
-                <p className={`leading-tight ${textSafe}`}>{exp.description}</p>
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-10">
+        <div className="md:col-span-8 space-y-10">
+          {experience.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.experience}</h2>
+              <div className="space-y-6">
+                {experience.map(exp => (
+                  <div key={exp.id} className="border-b-2 border-black pb-4">
+                    <div className="flex flex-wrap justify-between font-black text-lg mb-1 gap-2">
+                      <span className={textSafe}>{exp.position}</span>
+                      <span className="whitespace-nowrap">{exp.startDate} &gt; {exp.endDate}</span>
+                    </div>
+                    <div className={`font-bold mb-3 uppercase tracking-widest underline ${textSafe}`}>{exp.company}</div>
+                    <p className={`leading-tight ${textSafe}`}>{exp.description}</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {education.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.education}</h2>
+              <div className="space-y-4">
+                {education.map(edu => (
+                  <div key={edu.id}>
+                    <div className={`font-black text-lg ${textSafe}`}>{edu.degree}</div>
+                    <div className={`text-base font-bold uppercase ${textSafe}`}>{edu.school} // {edu.startDate} &gt; {edu.endDate}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {education.length > 0 && (
-          <div>
-            <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.education}</h2>
-            <div className="space-y-4">
-              {education.map(edu => (
-                <div key={edu.id}>
-                  <div className={`font-black ${textSafe}`}>{edu.degree}</div>
-                  <div className={`text-sm uppercase ${textSafe}`}>{edu.school} // {edu.startDate} &gt; {edu.endDate}</div>
-                </div>
-              ))}
+
+        <div className="md:col-span-4 space-y-10">
+          {skills.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.skills}</h2>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                {skills.map((skill, i) => (
+                  <span key={i} className={`font-bold uppercase underline ${textSafe}`}>{skill}</span>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        {skills.length > 0 && (
-          <div>
-            <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.skills}</h2>
-            <div className="flex flex-wrap gap-x-4 gap-y-2">
-              {skills.map((skill, i) => (
-                <span key={i} className={`font-bold uppercase underline ${textSafe}`}>{skill}</span>
-              ))}
+          )}
+
+          {languages.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.languages}</h2>
+              <div className="space-y-4">
+                {languages.map(lang => (
+                  <div key={lang.id}>
+                    <div className={`font-black uppercase ${textSafe}`}>{lang.language}</div>
+                    <div className="text-sm font-bold opacity-60 uppercase">{proficiencyLabel(lang.proficiency, t)}</div>
+                  </div>
+                ))}
+              </div>
             </div>
-          </div>
-        )}
+          )}
+
+          {hobbies.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.hobbies}</h2>
+              <div className="flex flex-wrap gap-x-4 gap-y-2">
+                {hobbies.map((hobby, i) => (
+                  <span key={i} className={`font-bold uppercase ${textSafe}`}>{hobby}</span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   </div>

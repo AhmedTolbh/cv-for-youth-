@@ -79,7 +79,7 @@ export default function LandingPage() {
                     <div className="space-y-2">
                         <Sparkles size={20} className="mb-2 text-indigo-600" />
                         <h4 className="font-bold text-slate-700 uppercase tracking-widest">{t.experience}</h4>
-                        <p>Relevant experiences highlighted for every age.</p>
+                        <p>{t.relevantExperience}</p>
                     </div>
                 </div>
             </div>

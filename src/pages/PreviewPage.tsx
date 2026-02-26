@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore';
 import { translations } from '../i18n';
 import Layout from '../components/Layout';
 import * as Templates from '../components/Templates';
-import { Download, ChevronLeft, Layout as LayoutIcon, FileText, Printer, Loader2 } from 'lucide-react';
+import { Download, ChevronLeft, Layout as LayoutIcon, FileText, Printer, Loader2, Globe } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TabStopPosition, TabStopType } from 'docx';
 import { saveAs } from 'file-saver';
 
@@ -24,7 +24,8 @@ export default function PreviewPage() {
         hobbies,
         languages,
         template,
-        setTemplate
+        setTemplate,
+        setResumeLanguage
     } = useStore();
 
     const t = translations[appLanguage];
@@ -382,6 +383,32 @@ ${resumeHTML}
                                     {opt.name}
                                 </button>
                             ))}
+                        </div>
+                    </div>
+
+                    <div className="card space-y-4">
+                        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-900">
+                            <Globe size={20} /> {t.selectResumeLanguage}
+                        </h2>
+                        <div className="flex gap-2">
+                            <button
+                                onClick={() => setResumeLanguage('fi')}
+                                className={`flex-1 py-3 rounded-xl border font-bold transition-all ${resumeLanguage === 'fi'
+                                    ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-blue-600'
+                                    }`}
+                            >
+                                Suomi 🇫🇮
+                            </button>
+                            <button
+                                onClick={() => setResumeLanguage('en')}
+                                className={`flex-1 py-3 rounded-xl border font-bold transition-all ${resumeLanguage === 'en'
+                                    ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                                    : 'bg-white border-slate-200 text-slate-600 hover:border-blue-600'
+                                    }`}
+                            >
+                                English 🇬🇧
+                            </button>
                         </div>
                     </div>
 
