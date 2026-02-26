@@ -92,3 +92,45 @@ th {
     overflow-wrap: break-word;
     word-break: break-word;
 }
+
+/* ===== Print Styles ===== */
+@media print {
+
+    /* Ensure background colors and images print */
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+
+    /* Hide all UI except the resume */
+    body * {
+        visibility: hidden;
+    }
+
+    .resume-template,
+    .resume-template * {
+        visibility: visible;
+    }
+
+    .resume-template {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+    /* Hide mesh background */
+    .mesh-bg {
+        display: none !important;
+    }
+
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}

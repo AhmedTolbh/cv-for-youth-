@@ -5,8 +5,6 @@ import { translations } from '../i18n';
 import Layout from '../components/Layout';
 import * as Templates from '../components/Templates';
 import { Download, ChevronLeft, Layout as LayoutIcon, FileText, Printer, Loader2 } from 'lucide-react';
-import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TabStopPosition, TabStopType } from 'docx';
 import { saveAs } from 'file-saver';
 
@@ -48,56 +46,123 @@ export default function PreviewPage() {
     const SelectedTemplate = (Templates as any)[`${templateKey}Template`] || Templates.ModernTemplate;
 
     /* =========================================================
-     * PDF GENERATION — capture the visible template with html2canvas
+     * PDF GENERATION — Uses browser native print engine
+     * Opens a clean window with ONLY the template + all styles,
+     * then triggers print → user clicks "Save as PDF".
+     * This is 100% reliable because the BROWSER renders the PDF.
      * ========================================================= */
     const handleDownloadPDF = async () => {
         if (!resumeRef.current || downloading) return;
         setDownloading(true);
 
         try {
-            const el = resumeRef.current;
-
-            // Capture the VISIBLE rendered element directly — all Tailwind
-            // styles are already computed by the browser so html2canvas can
-            // read them. No cloning, no style patching needed.
-            const canvas = await html2canvas(el, {
-                scale: 2,               // high-DPI for sharp text
-                useCORS: true,           // allow cross-origin images
-                logging: false,
-                backgroundColor: '#ffffff',
-            });
-
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();   // 210 mm
-            const pdfHeight = pdf.internal.pageSize.getHeight(); // 297 mm
-
-            // Scale image to fit page width, preserving aspect ratio
-            const imgWidth = pdfWidth;
-            const imgHeight = (canvas.height * pdfWidth) / canvas.width;
-
-            // Multi-page support
-            let heightLeft = imgHeight;
-            let position = 0;
-
-            pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-            heightLeft -= pdfHeight;
-
-            while (heightLeft > 0) {
-                position -= pdfHeight;
-                pdf.addPage();
-                pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
-                heightLeft -= pdfHeight;
+            // 1. Collect ALL CSS from the current page (Tailwind, custom, etc.)
+            const cssTexts: string[] = [];
+            for (let i = 0; i < document.styleSheets.length; i++) {
+                const sheet = document.styleSheets[i];
+                try {
+                    for (let j = 0; j < sheet.cssRules.length; j++) {
+                        cssTexts.push(sheet.cssRules[j].cssText);
+                    }
+                } catch {
+                    // Cross-origin stylesheet — import by URL
+                    if (sheet.href) {
+                        cssTexts.push(`@import url("${sheet.href}");`);
+                    }
+                }
             }
 
-            const fileName = personalInfo.firstName && personalInfo.lastName
-                ? `${personalInfo.firstName}_${personalInfo.lastName}_Resume.pdf`
-                : 'Resume.pdf';
-            pdf.save(fileName);
+            // 2. Get the resume HTML and its wrapper classes
+            const resumeHTML = resumeRef.current.innerHTML;
+            const resumeClasses = resumeRef.current.className;
+
+            // 3. Build a standalone HTML document with the resume + all CSS
+            const html = `<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>${personalInfo.firstName || ''} ${personalInfo.lastName || ''} Resume</title>
+<style>
+/* ===== All page styles ===== */
+${cssTexts.join('\n')}
+
+/* ===== Print-specific overrides ===== */
+@page {
+    size: A4;
+    margin: 0;
+}
+@media print {
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+        color-adjust: exact !important;
+    }
+}
+html, body {
+    margin: 0;
+    padding: 0;
+    background: white;
+    width: 210mm;
+}
+.print-resume-wrapper {
+    width: 210mm;
+    min-height: 297mm;
+    margin: 0;
+    padding: 0;
+    background: white;
+    overflow: visible;
+    box-shadow: none;
+    border: none;
+}
+</style>
+</head>
+<body>
+<div class="print-resume-wrapper ${resumeClasses}">
+${resumeHTML}
+</div>
+</body>
+</html>`;
+
+            // 4. Open a new window with ONLY the resume
+            const printWindow = window.open('', '_blank', 'width=900,height=1200');
+            if (!printWindow) {
+                // Popup blocked — fall back to printing the current page
+                window.print();
+                setDownloading(false);
+                return;
+            }
+
+            printWindow.document.open();
+            printWindow.document.write(html);
+            printWindow.document.close();
+
+            // 5. Wait for render, then trigger print dialog
+            const triggerPrint = () => {
+                printWindow.focus();
+                printWindow.print();
+                setDownloading(false);
+            };
+
+            // Use both load event and timeout fallback
+            let printed = false;
+            printWindow.addEventListener('load', () => {
+                if (!printed) {
+                    printed = true;
+                    setTimeout(triggerPrint, 400);
+                }
+            });
+            // Fallback in case load event doesn't fire
+            setTimeout(() => {
+                if (!printed) {
+                    printed = true;
+                    triggerPrint();
+                }
+            }, 2000);
+
         } catch (error) {
             console.error('PDF generation failed:', error);
-            alert('PDF generation failed. Please try again.');
-        } finally {
+            // Ultimate fallback — just print the page
+            window.print();
             setDownloading(false);
         }
     };
