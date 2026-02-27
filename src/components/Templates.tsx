@@ -6,9 +6,11 @@ interface TemplateProps {
   summary: string;
   education: any[];
   experience: any[];
+  volunteering: any[];
   skills: string[];
   hobbies: string[];
   languages: any[];
+  themeColor?: string;
   t: any;
   resumeRef?: React.RefObject<HTMLDivElement | null>;
 }
@@ -28,26 +30,28 @@ const proficiencyLabel = (key: string, t: any): string => {
   return map[key] || key;
 };
 
-export const ModernTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const ModernTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-16 font-sans text-neutral-800`}>
-    <div className={`border-b-4 border-neutral-900 pb-8 mb-10 flex flex-wrap justify-between items-start gap-4 ${textSafe}`}>
+    <div className={`border-b-4 pb-8 mb-10 flex flex-wrap justify-between items-start gap-4 ${textSafe}`} style={{ borderColor: themeColor }}>
       <div className="flex-1 min-w-0">
         <h1 className={`text-3xl md:text-5xl font-black text-neutral-900 mb-4 uppercase tracking-tighter ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
         <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm font-medium text-neutral-500">
-          {personalInfo.email && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-brand-500 shrink-0" /> <span className={textSafe}>{personalInfo.email}</span></span>}
-          {personalInfo.phone && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-brand-500 shrink-0" /> {personalInfo.phone}</span>}
-          {personalInfo.location && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-brand-500 shrink-0" /> <span className={textSafe}>{personalInfo.location}</span></span>}
-          {personalInfo.linkedin && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 text-brand-500 shrink-0" /> <span className={textSafe}>{personalInfo.linkedin}</span></span>}
+          {personalInfo.email && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> <span className={textSafe}>{personalInfo.email}</span></span>}
+          {personalInfo.phone && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> {personalInfo.phone}</span>}
+          {personalInfo.location && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> <span className={textSafe}>{personalInfo.location}</span></span>}
+          {personalInfo.linkedin && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> <span className={textSafe}>{personalInfo.linkedin}</span></span>}
+          {personalInfo.github && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> <span className={textSafe}>{personalInfo.github}</span></span>}
+          {personalInfo.portfolio && <span className="flex items-center gap-1"><CheckCircle2 className="w-3 h-3 shrink-0" style={{ color: themeColor }} /> <span className={textSafe}>{personalInfo.portfolio}</span></span>}
         </div>
       </div>
       {personalInfo.photo && (
-        <img src={personalInfo.photo} alt="Profile" className="w-28 h-28 rounded-2xl object-cover border-2 border-neutral-100 shadow-sm" />
+        <img src={personalInfo.photo} alt="Profile" className="w-28 h-28 rounded-2xl object-cover border-2 shadow-sm" style={{ borderColor: themeColor }} />
       )}
     </div>
 
     {summary && (
       <div className="mb-10">
-        <h2 className="text-xs font-black text-brand-600 mb-4 uppercase tracking-[0.2em]">{t.summary}</h2>
+        <h2 className="text-xs font-black mb-4 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.summary}</h2>
         <p className={`text-neutral-700 leading-relaxed text-base font-light ${textSafe}`}>{summary}</p>
       </div>
     )}
@@ -56,16 +60,35 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
       <div className="md:col-span-8 space-y-10">
         {experience.length > 0 && (
           <div>
-            <h2 className="text-xs font-black text-brand-600 mb-6 uppercase tracking-[0.2em]">{t.experience}</h2>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.experience}</h2>
             <div className="space-y-6">
               {experience.map(exp => (
                 <div key={exp.id} className="relative pl-6 border-l-2 border-neutral-100">
-                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2 border-brand-500" />
+                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2" style={{ borderColor: themeColor }} />
                   <div className="flex flex-wrap justify-between items-baseline mb-2 gap-2">
                     <h3 className={`font-bold text-neutral-900 text-lg ${textSafe}`}>{exp.position}</h3>
                     <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
                   </div>
-                  <div className={`text-brand-600 font-bold text-sm mb-3 uppercase tracking-wide ${textSafe}`}>{exp.company}</div>
+                  <div className={`font-bold text-sm uppercase tracking-wide mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
+                  <p className={`text-neutral-600 leading-relaxed text-sm ${textSafe}`}>{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {volunteering && volunteering.length > 0 && (
+          <div>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.volunteering || 'Volunteering & Activities'}</h2>
+            <div className="space-y-6">
+              {volunteering.map(exp => (
+                <div key={exp.id} className="relative pl-6 border-l-2 border-neutral-100">
+                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2" style={{ borderColor: themeColor }} />
+                  <div className="flex flex-wrap justify-between items-baseline mb-2 gap-2">
+                    <h3 className={`font-bold text-neutral-900 text-lg ${textSafe}`}>{exp.position}</h3>
+                    <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
+                  </div>
+                  <div className={`font-bold text-sm uppercase tracking-wide mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
                   <p className={`text-neutral-600 leading-relaxed text-sm ${textSafe}`}>{exp.description}</p>
                 </div>
               ))}
@@ -75,16 +98,16 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
 
         {education.length > 0 && (
           <div>
-            <h2 className="text-xs font-black text-brand-600 mb-6 uppercase tracking-[0.2em]">{t.education}</h2>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.education}</h2>
             <div className="space-y-6">
               {education.map(edu => (
                 <div key={edu.id} className="relative pl-6 border-l-2 border-neutral-100">
-                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2 border-brand-500" />
+                  <div className="absolute -left-[9px] top-0 w-4 h-4 rounded-full bg-white border-2" style={{ borderColor: themeColor }} />
                   <div className="flex flex-wrap justify-between items-baseline mb-1 gap-2">
                     <h3 className={`font-bold text-neutral-900 text-lg ${textSafe}`}>{edu.degree}</h3>
                     <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider whitespace-nowrap">{edu.startDate} — {edu.endDate}</span>
                   </div>
-                  <div className={`text-brand-600 font-bold text-sm uppercase tracking-wide ${textSafe}`}>{edu.school}</div>
+                  <div className={`font-bold text-sm uppercase tracking-wide ${textSafe}`} style={{ color: themeColor }}>{edu.school}</div>
                 </div>
               ))}
             </div>
@@ -95,10 +118,10 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
       <div className="md:col-span-4 space-y-10">
         {skills.length > 0 && (
           <div>
-            <h2 className="text-xs font-black text-brand-600 mb-6 uppercase tracking-[0.2em]">{t.skills}</h2>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.skills}</h2>
             <div className="flex flex-wrap gap-2">
               {skills.map((skill, i) => (
-                <span key={i} className={`px-3 py-1.5 bg-neutral-900 text-white rounded-lg text-xs font-bold uppercase tracking-wider ${textSafe}`}>
+                <span key={i} className={`px-3 py-1.5 text-white rounded-lg text-xs font-bold uppercase tracking-wider ${textSafe}`} style={{ backgroundColor: themeColor }}>
                   {skill}
                 </span>
               ))}
@@ -108,7 +131,7 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
 
         {languages.length > 0 && (
           <div>
-            <h2 className="text-xs font-black text-brand-600 mb-6 uppercase tracking-[0.2em]">{t.languages}</h2>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.languages}</h2>
             <div className="space-y-4">
               {languages.map(lang => (
                 <div key={lang.id}>
@@ -118,8 +141,8 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
                   </div>
                   <div className="w-full bg-neutral-100 h-1 rounded-full overflow-hidden">
                     <div
-                      className="bg-brand-500 h-full"
-                      style={{ width: lang.proficiency === 'Native' ? '100%' : lang.proficiency === 'Fluent' ? '85%' : lang.proficiency === 'Intermediate' ? '60%' : '30%' }}
+                      className="h-full"
+                      style={{ width: lang.proficiency === 'Native' ? '100%' : lang.proficiency === 'Fluent' ? '85%' : lang.proficiency === 'Intermediate' ? '60%' : '30%', backgroundColor: themeColor }}
                     />
                   </div>
                 </div>
@@ -130,10 +153,10 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
 
         {hobbies.length > 0 && (
           <div>
-            <h2 className="text-xs font-black text-brand-600 mb-6 uppercase tracking-[0.2em]">{t.hobbies}</h2>
+            <h2 className="text-xs font-black mb-6 uppercase tracking-[0.2em]" style={{ color: themeColor }}>{t.hobbies}</h2>
             <div className="flex flex-wrap gap-2">
               {hobbies.map((hobby, i) => (
-                <span key={i} className={`px-3 py-1.5 bg-neutral-100 text-neutral-700 rounded-lg text-xs font-bold uppercase tracking-wider ${textSafe}`}>
+                <span key={i} className={`px-3 py-1.5 bg-neutral-100 text-neutral-800 rounded-lg text-xs font-bold uppercase tracking-wider border-l-2 ${textSafe}`} style={{ borderColor: themeColor }}>
                   {hobby}
                 </span>
               ))}
@@ -145,27 +168,30 @@ export const ModernTemplate = ({ personalInfo, summary, education, experience, s
   </div>
 );
 
-export const CreativeTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const CreativeTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} flex flex-col md:flex-row font-sans overflow-hidden`}>
     <div className="w-full md:w-64 bg-neutral-900 text-white p-8 md:p-10 flex flex-col gap-10 shrink-0">
       <div className="space-y-6">
         {personalInfo.photo && (
-          <img src={personalInfo.photo} alt="Profile" className="w-full max-w-[200px] aspect-square rounded-3xl object-cover border-4 border-brand-400/30 shadow-2xl mb-8" />
+          <img src={personalInfo.photo} alt="Profile" className="w-full max-w-[200px] aspect-square rounded-3xl object-cover border-4 shadow-2xl mb-8" style={{ borderColor: themeColor ? `${themeColor}4d` : 'rgba(96, 165, 250, 0.3)' }} />
         )}
         <h1 className={`text-3xl font-black uppercase leading-none tracking-tighter ${textSafe}`}>
           {personalInfo.firstName}<br />
-          <span className="text-brand-400">{personalInfo.lastName}</span>
+          <span style={{ color: themeColor }}>{personalInfo.lastName}</span>
         </h1>
         <div className={`space-y-2 text-xs font-medium text-neutral-400 ${textSafe}`}>
           <p>{personalInfo.email}</p>
           <p>{personalInfo.phone}</p>
           <p>{personalInfo.location}</p>
+          {personalInfo.linkedin && <p className={textSafe}>{personalInfo.linkedin}</p>}
+          {personalInfo.github && <p className={textSafe}>{personalInfo.github}</p>}
+          {personalInfo.portfolio && <p className={textSafe}>{personalInfo.portfolio}</p>}
         </div>
       </div>
 
       {skills.length > 0 && (
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400 mb-6">{t.skills}</h2>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6" style={{ color: themeColor }}>{t.skills}</h2>
           <div className="flex flex-col gap-3">
             {skills.map((skill, i) => (
               <div key={i} className={`text-sm font-bold border-b border-neutral-800 pb-2 ${textSafe}`}>{skill}</div>
@@ -176,7 +202,7 @@ export const CreativeTemplate = ({ personalInfo, summary, education, experience,
 
       {languages.length > 0 && (
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-400 mb-6">{t.languages}</h2>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.3em] mb-6" style={{ color: themeColor }}>{t.languages}</h2>
           <div className="space-y-4">
             {languages.map(lang => (
               <div key={lang.id} className="text-sm">
@@ -207,6 +233,24 @@ export const CreativeTemplate = ({ personalInfo, summary, education, experience,
                   <h3 className={`text-xl font-black text-neutral-900 ${textSafe}`}>{exp.position}</h3>
                   <span className="text-xs font-bold text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
                 </div>
+                <div className={`text-sm font-bold uppercase tracking-widest mb-4 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
+                <p className={`text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {volunteering && volunteering.length > 0 && (
+        <div>
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-400 mb-6">{t.volunteering || 'Volunteering'}</h2>
+          <div className="space-y-8">
+            {volunteering.map(exp => (
+              <div key={exp.id} className="group">
+                <div className="flex flex-wrap justify-between items-baseline mb-2 gap-2">
+                  <h3 className={`text-xl font-black text-neutral-900 ${textSafe}`}>{exp.position}</h3>
+                  <span className="text-xs font-bold text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
+                </div>
                 <div className={`text-sm font-bold text-neutral-500 uppercase tracking-widest mb-4 ${textSafe}`}>{exp.company}</div>
                 <p className={`text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
               </div>
@@ -221,7 +265,7 @@ export const CreativeTemplate = ({ personalInfo, summary, education, experience,
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {education.map(edu => (
               <div key={edu.id}>
-                <div className="text-xs font-bold text-brand-600 mb-1">{edu.startDate} — {edu.endDate}</div>
+                <div className="text-xs font-bold mb-1" style={{ color: themeColor }}>{edu.startDate} — {edu.endDate}</div>
                 <h3 className={`font-black text-neutral-900 text-lg leading-tight mb-1 ${textSafe}`}>{edu.degree}</h3>
                 <div className={`text-sm font-bold text-neutral-500 ${textSafe}`}>{edu.school}</div>
               </div>
@@ -233,7 +277,7 @@ export const CreativeTemplate = ({ personalInfo, summary, education, experience,
   </div>
 );
 
-export const MinimalTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const MinimalTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-16 font-sans text-neutral-900 flex flex-col items-center`}>
     <div className="text-center mb-16 w-full">
       {personalInfo.photo && (
@@ -246,6 +290,9 @@ export const MinimalTemplate = ({ personalInfo, summary, education, experience, 
         <span>{personalInfo.phone}</span>
         <span>•</span>
         <span>{personalInfo.location}</span>
+        {personalInfo.linkedin && <><span>•</span><span className={textSafe}>{personalInfo.linkedin}</span></>}
+        {personalInfo.github && <><span>•</span><span className={textSafe}>{personalInfo.github}</span></>}
+        {personalInfo.portfolio && <><span>•</span><span className={textSafe}>{personalInfo.portfolio}</span></>}
       </div>
     </div>
 
@@ -261,6 +308,21 @@ export const MinimalTemplate = ({ personalInfo, summary, education, experience, 
           <h2 className="text-center text-[10px] font-black uppercase tracking-[0.4em] text-neutral-300">{t.experience}</h2>
           <div className="space-y-10">
             {experience.map(exp => (
+              <div key={exp.id} className="text-center">
+                <h3 className={`text-xl font-bold mb-1 ${textSafe}`}>{exp.position}</h3>
+                <div className="text-sm font-medium text-neutral-400 mb-4">{exp.company} | {exp.startDate} — {exp.endDate}</div>
+                <p className={`text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {volunteering && volunteering.length > 0 && (
+        <div className="space-y-8">
+          <h2 className="text-center text-[10px] font-black uppercase tracking-[0.4em] text-neutral-300">{t.volunteering || 'Volunteering'}</h2>
+          <div className="space-y-10">
+            {volunteering.map(exp => (
               <div key={exp.id} className="text-center">
                 <h3 className={`text-xl font-bold mb-1 ${textSafe}`}>{exp.position}</h3>
                 <div className="text-sm font-medium text-neutral-400 mb-4">{exp.company} | {exp.startDate} — {exp.endDate}</div>
@@ -308,12 +370,23 @@ export const MinimalTemplate = ({ personalInfo, summary, education, experience, 
             </div>
           </div>
         )}
+
+        {hobbies && hobbies.length > 0 && (
+          <div className="text-left col-span-1 md:col-span-2 pt-4">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-neutral-300 mb-4">{t.hobbies}</h2>
+            <div className="flex flex-wrap justify-center gap-2">
+              {hobbies.map((hobby, i) => (
+                <span key={i} className={`text-sm font-medium ${textSafe}`}>{hobby}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   </div>
 );
 
-export const ProfessionalTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const ProfessionalTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-14 font-sans text-neutral-800`}>
     <div className="flex flex-wrap justify-between items-start mb-10 gap-4">
       <div className="flex gap-6 items-start min-w-0 flex-1">
@@ -322,7 +395,7 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
         )}
         <div className="min-w-0">
           <h1 className={`text-3xl font-bold text-neutral-900 mb-2 ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
-          <div className={`text-brand-600 font-bold uppercase tracking-widest text-sm ${textSafe}`}>
+          <div className={`font-bold uppercase tracking-widest text-sm ${textSafe}`} style={{ color: themeColor }}>
             {experience[0]?.position || t.professional || 'Professional'}
           </div>
         </div>
@@ -331,6 +404,9 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
         <p>{personalInfo.email}</p>
         <p>{personalInfo.phone}</p>
         <p>{personalInfo.location}</p>
+        {personalInfo.linkedin && <p className={textSafe}>{personalInfo.linkedin}</p>}
+        {personalInfo.github && <p className={textSafe}>{personalInfo.github}</p>}
+        {personalInfo.portfolio && <p className={textSafe}>{personalInfo.portfolio}</p>}
       </div>
     </div>
 
@@ -349,7 +425,7 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
             <div className="space-y-2">
               {skills.map((skill, i) => (
                 <div key={i} className={`text-sm flex items-center gap-2 ${textSafe}`}>
-                  <div className="w-1.5 h-1.5 bg-brand-500 rounded-full shrink-0" />
+                  <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: themeColor }} />
                   {skill}
                 </div>
               ))}
@@ -370,6 +446,17 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
             </div>
           </div>
         )}
+
+        {hobbies && hobbies.length > 0 && (
+          <div>
+            <h2 className="text-sm font-bold uppercase tracking-widest border-b-2 border-neutral-900 pb-2 mb-4">{t.hobbies}</h2>
+            <div className="flex flex-wrap gap-2">
+              {hobbies.map((hobby, i) => (
+                <span key={i} className={`text-xs px-2 py-1 bg-neutral-100 rounded ${textSafe}`}>{hobby}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="md:col-span-8 space-y-8">
@@ -383,7 +470,25 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
                     <span className={textSafe}>{exp.position}</span>
                     <span className="text-sm text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
                   </div>
-                  <div className={`text-brand-600 text-sm font-bold mb-3 ${textSafe}`}>{exp.company}</div>
+                  <div className={`text-sm font-bold mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
+                  <p className={`text-sm text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {volunteering && volunteering.length > 0 && (
+          <div>
+            <h2 className="text-sm font-bold uppercase tracking-widest border-b-2 border-neutral-900 pb-2 mb-6">{t.volunteering || 'Volunteering'}</h2>
+            <div className="space-y-6">
+              {volunteering.map(exp => (
+                <div key={exp.id}>
+                  <div className="flex flex-wrap justify-between font-bold text-neutral-900 mb-1 gap-2">
+                    <span className={textSafe}>{exp.position}</span>
+                    <span className="text-sm text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
+                  </div>
+                  <div className={`text-sm font-bold mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
                   <p className={`text-sm text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
                 </div>
               ))}
@@ -412,7 +517,7 @@ export const ProfessionalTemplate = ({ personalInfo, summary, education, experie
   </div>
 );
 
-export const AtsTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const AtsTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-14 font-serif text-black`}>
     <div className={`text-center border-b-2 border-black pb-6 mb-8 flex flex-col items-center ${textSafe}`}>
       {personalInfo.photo && (
@@ -420,7 +525,7 @@ export const AtsTemplate = ({ personalInfo, summary, education, experience, skil
       )}
       <h1 className={`text-3xl font-bold mb-3 uppercase tracking-tight ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
       <div className={`text-sm font-medium tracking-wide ${textSafe}`}>
-        {personalInfo.location} • {personalInfo.phone} • {personalInfo.email} {personalInfo.linkedin && ` • ${personalInfo.linkedin}`}
+        {personalInfo.location} • {personalInfo.phone} • {personalInfo.email} {personalInfo.linkedin && ` • ${personalInfo.linkedin}`} {personalInfo.github && ` • ${personalInfo.github}`} {personalInfo.portfolio && ` • ${personalInfo.portfolio}`}
       </div>
     </div>
 
@@ -436,6 +541,24 @@ export const AtsTemplate = ({ personalInfo, summary, education, experience, skil
         <h2 className="text-lg font-bold border-b border-black uppercase mb-4 tracking-widest">{t.experience}</h2>
         <div className="space-y-6">
           {experience.map(exp => (
+            <div key={exp.id}>
+              <div className="flex flex-wrap justify-between font-bold text-sm mb-1 gap-2">
+                <span className={`uppercase ${textSafe}`}>{exp.position}</span>
+                <span className="whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
+              </div>
+              <div className={`italic text-sm mb-2 ${textSafe}`}>{exp.company}</div>
+              <p className={`text-sm leading-relaxed text-justify ${textSafe}`}>{exp.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+    {volunteering && volunteering.length > 0 && (
+      <div className="mb-8">
+        <h2 className="text-lg font-bold border-b border-black uppercase mb-4 tracking-widest">{t.volunteering || 'Volunteering'}</h2>
+        <div className="space-y-6">
+          {volunteering.map(exp => (
             <div key={exp.id}>
               <div className="flex flex-wrap justify-between font-bold text-sm mb-1 gap-2">
                 <span className={`uppercase ${textSafe}`}>{exp.position}</span>
@@ -481,29 +604,39 @@ export const AtsTemplate = ({ personalInfo, summary, education, experience, skil
           </p>
         </div>
       )}
+
+      {hobbies && hobbies.length > 0 && (
+        <div className="md:col-span-2">
+          <h2 className="text-lg font-bold border-b border-black uppercase mb-3 tracking-widest">{t.hobbies}</h2>
+          <p className={`text-sm leading-relaxed ${textSafe}`}>{hobbies.join(', ')}</p>
+        </div>
+      )}
     </div>
   </div>
 );
 
-export const BoldTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const BoldTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} font-sans text-neutral-900`}>
     <div className="bg-neutral-900 text-white p-8 md:p-12 flex flex-wrap justify-between items-center gap-4">
       <div className="min-w-0 flex-1">
         <h1 className={`text-3xl md:text-5xl font-black uppercase tracking-tighter mb-4 ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
-        <div className={`flex flex-wrap gap-4 text-sm font-bold text-brand-400 uppercase tracking-widest ${textSafe}`}>
+        <div className={`flex flex-wrap gap-4 text-sm font-bold uppercase tracking-widest ${textSafe}`} style={{ color: themeColor }}>
           <span>{personalInfo.email}</span>
           <span>{personalInfo.phone}</span>
           <span>{personalInfo.location}</span>
+          {personalInfo.linkedin && <span className={textSafe}>{personalInfo.linkedin}</span>}
+          {personalInfo.github && <span className={textSafe}>{personalInfo.github}</span>}
+          {personalInfo.portfolio && <span className={textSafe}>{personalInfo.portfolio}</span>}
         </div>
       </div>
       {personalInfo.photo && (
-        <img src={personalInfo.photo} alt="Profile" className="w-32 h-32 object-cover border-8 border-brand-500 shadow-2xl" />
+        <img src={personalInfo.photo} alt="Profile" className="w-32 h-32 object-cover border-8 shadow-2xl" style={{ borderColor: themeColor }} />
       )}
     </div>
     <div className="p-8 md:p-12 space-y-10">
       {summary && (
         <div>
-          <h2 className="text-xl font-black uppercase mb-4 border-l-8 border-brand-500 pl-4">{t.summary}</h2>
+          <h2 className="text-xl font-black uppercase mb-4 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.summary}</h2>
           <p className={`text-lg leading-relaxed ${textSafe}`}>{summary}</p>
         </div>
       )}
@@ -511,9 +644,23 @@ export const BoldTemplate = ({ personalInfo, summary, education, experience, ski
         <div className="space-y-10">
           {experience.length > 0 && (
             <div>
-              <h2 className="text-xl font-black uppercase mb-6 border-l-8 border-brand-500 pl-4">{t.experience}</h2>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.experience}</h2>
               <div className="space-y-6">
                 {experience.map(exp => (
+                  <div key={exp.id}>
+                    <h3 className={`text-lg font-bold ${textSafe}`}>{exp.position}</h3>
+                    <div className={`text-brand-600 font-bold mb-2 text-sm ${textSafe}`}>{exp.company} | {exp.startDate} — {exp.endDate}</div>
+                    <p className={`text-neutral-600 ${textSafe}`}>{exp.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {volunteering && volunteering.length > 0 && (
+            <div>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.volunteering || 'Volunteering'}</h2>
+              <div className="space-y-6">
+                {volunteering.map(exp => (
                   <div key={exp.id}>
                     <h3 className={`text-lg font-bold ${textSafe}`}>{exp.position}</h3>
                     <div className={`text-brand-600 font-bold mb-2 text-sm ${textSafe}`}>{exp.company} | {exp.startDate} — {exp.endDate}</div>
@@ -527,7 +674,7 @@ export const BoldTemplate = ({ personalInfo, summary, education, experience, ski
         <div className="space-y-10">
           {education.length > 0 && (
             <div>
-              <h2 className="text-xl font-black uppercase mb-6 border-l-8 border-brand-500 pl-4">{t.education}</h2>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.education}</h2>
               <div className="space-y-4">
                 {education.map(edu => (
                   <div key={edu.id}>
@@ -540,10 +687,33 @@ export const BoldTemplate = ({ personalInfo, summary, education, experience, ski
           )}
           {skills.length > 0 && (
             <div>
-              <h2 className="text-xl font-black uppercase mb-6 border-l-8 border-brand-500 pl-4">{t.skills}</h2>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.skills}</h2>
               <div className="flex flex-wrap gap-2">
                 {skills.map((skill, i) => (
                   <span key={i} className={`px-3 py-2 bg-neutral-100 font-bold rounded-lg text-sm ${textSafe}`}>{skill}</span>
+                ))}
+              </div>
+            </div>
+          )}
+          {languages.length > 0 && (
+            <div>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.languages}</h2>
+              <div className="space-y-3">
+                {languages.map(lang => (
+                  <div key={lang.id} className="flex flex-col">
+                    <span className={`font-bold ${textSafe}`}>{lang.language}</span>
+                    <span className="text-sm text-neutral-500 uppercase">{proficiencyLabel(lang.proficiency, t)}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {hobbies && hobbies.length > 0 && (
+            <div>
+              <h2 className="text-xl font-black uppercase mb-6 border-l-8 pl-4" style={{ borderColor: themeColor }}>{t.hobbies}</h2>
+              <div className="flex flex-wrap gap-2">
+                {hobbies.map((hobby, i) => (
+                  <span key={i} className={`px-3 py-1 bg-neutral-100 font-bold rounded-lg text-sm ${textSafe}`}>{hobby}</span>
                 ))}
               </div>
             </div>
@@ -554,7 +724,7 @@ export const BoldTemplate = ({ personalInfo, summary, education, experience, ski
   </div>
 );
 
-export const ElegantTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const ElegantTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-10 md:p-16 font-serif text-neutral-800 bg-[#fdfcfb]`}>
     <div className="text-center mb-14 border-b border-neutral-200 pb-10">
       {personalInfo.photo && (
@@ -563,6 +733,9 @@ export const ElegantTemplate = ({ personalInfo, summary, education, experience, 
       <h1 className={`text-4xl font-light italic mb-4 ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
       <div className={`text-sm tracking-[0.3em] uppercase text-neutral-400 ${textSafe}`}>
         {personalInfo.location} • {personalInfo.phone} • {personalInfo.email}
+        {personalInfo.linkedin && ` • ${personalInfo.linkedin}`}
+        {personalInfo.github && ` • ${personalInfo.github}`}
+        {personalInfo.portfolio && ` • ${personalInfo.portfolio}`}
       </div>
     </div>
     <div className="max-w-2xl mx-auto space-y-14">
@@ -583,6 +756,18 @@ export const ElegantTemplate = ({ personalInfo, summary, education, experience, 
           ))}
         </div>
       )}
+      {volunteering && volunteering.length > 0 && (
+        <div className="space-y-8">
+          <h2 className="text-center text-xs font-bold uppercase tracking-[0.5em] text-neutral-300 mb-8">{t.volunteering || 'Volunteering'}</h2>
+          {volunteering.map(exp => (
+            <div key={exp.id} className="text-center">
+              <h3 className={`text-xl font-medium mb-1 ${textSafe}`}>{exp.position}</h3>
+              <div className="text-sm italic text-neutral-400 mb-4">{exp.company} / {exp.startDate} — {exp.endDate}</div>
+              <p className={`text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
+            </div>
+          ))}
+        </div>
+      )}
       {education.length > 0 && (
         <div className="space-y-8">
           <h2 className="text-center text-xs font-bold uppercase tracking-[0.5em] text-neutral-300 mb-8">{t.education}</h2>
@@ -594,13 +779,46 @@ export const ElegantTemplate = ({ personalInfo, summary, education, experience, 
           ))}
         </div>
       )}
+      {skills.length > 0 && (
+        <div className="space-y-6">
+          <h2 className="text-center text-xs font-bold uppercase tracking-[0.5em] text-neutral-300 mb-4">{t.skills}</h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {skills.map((skill, i) => (
+              <span key={i} className={`text-sm tracking-widest ${textSafe}`}>{skill}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      {languages.length > 0 && (
+        <div className="space-y-6">
+          <h2 className="text-center text-xs font-bold uppercase tracking-[0.5em] text-neutral-300 mb-4">{t.languages}</h2>
+          <div className="flex flex-wrap justify-center gap-6">
+            {languages.map(lang => (
+              <div key={lang.id} className="text-center">
+                <div className={`text-sm ${textSafe}`}>{lang.language}</div>
+                <div className="text-xs italic text-neutral-400">{proficiencyLabel(lang.proficiency, t)}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {hobbies && hobbies.length > 0 && (
+        <div className="space-y-6">
+          <h2 className="text-center text-xs font-bold uppercase tracking-[0.5em] text-neutral-300 mb-4">{t.hobbies}</h2>
+          <div className="flex flex-wrap justify-center gap-4">
+            {hobbies.map((hobby, i) => (
+              <span key={i} className={`text-sm italic text-neutral-600 ${textSafe}`}>{hobby}</span>
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   </div>
 );
 
-export const CompactTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const CompactTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-8 md:p-10 font-sans text-neutral-800`}>
-    <div className="flex flex-wrap justify-between items-end border-b-2 border-neutral-100 pb-6 mb-6 gap-4">
+    <div className="flex flex-wrap justify-between items-end border-b-2 pb-6 mb-6 gap-4" style={{ borderColor: themeColor }}>
       <div className="flex gap-4 items-center min-w-0">
         {personalInfo.photo && (
           <img src={personalInfo.photo} alt="Profile" className="w-14 h-14 rounded-lg object-cover shrink-0" />
@@ -608,6 +826,11 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
         <div className="min-w-0">
           <h1 className={`text-2xl font-bold text-neutral-900 ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
           <p className={`text-sm text-neutral-500 ${textSafe}`}>{personalInfo.location} | {personalInfo.phone} | {personalInfo.email}</p>
+          {(personalInfo.linkedin || personalInfo.github || personalInfo.portfolio) && (
+            <p className={`text-sm text-neutral-500 mt-1 ${textSafe}`}>
+              {[personalInfo.linkedin, personalInfo.github, personalInfo.portfolio].filter(Boolean).join(' | ')}
+            </p>
+          )}
         </div>
       </div>
       <div className="flex flex-wrap gap-2">
@@ -620,15 +843,29 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
       <div className="space-y-6">
         {summary && (
           <div>
-            <h2 className="text-xs font-black uppercase tracking-widest text-brand-600 mb-2">{t.summary}</h2>
+            <h2 className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: themeColor }}>{t.summary}</h2>
             <p className={`text-xs leading-relaxed ${textSafe}`}>{summary}</p>
           </div>
         )}
         {experience.length > 0 && (
           <div>
-            <h2 className="text-xs font-black uppercase tracking-widest text-brand-600 mb-4">{t.experience}</h2>
+            <h2 className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: themeColor }}>{t.experience}</h2>
             <div className="space-y-4">
               {experience.map(exp => (
+                <div key={exp.id}>
+                  <h3 className={`text-sm font-bold ${textSafe}`}>{exp.position}</h3>
+                  <div className={`text-[10px] font-bold text-neutral-400 mb-1 ${textSafe}`}>{exp.company} | {exp.startDate} — {exp.endDate}</div>
+                  <p className={`text-[11px] leading-tight text-neutral-600 ${textSafe}`}>{exp.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+        {volunteering && volunteering.length > 0 && (
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: themeColor }}>{t.volunteering || 'Volunteering'}</h2>
+            <div className="space-y-4">
+              {volunteering.map(exp => (
                 <div key={exp.id}>
                   <h3 className={`text-sm font-bold ${textSafe}`}>{exp.position}</h3>
                   <div className={`text-[10px] font-bold text-neutral-400 mb-1 ${textSafe}`}>{exp.company} | {exp.startDate} — {exp.endDate}</div>
@@ -642,7 +879,7 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
       <div className="space-y-6">
         {education.length > 0 && (
           <div>
-            <h2 className="text-xs font-black uppercase tracking-widest text-brand-600 mb-4">{t.education}</h2>
+            <h2 className="text-xs font-black uppercase tracking-widest mb-4" style={{ color: themeColor }}>{t.education}</h2>
             <div className="space-y-3">
               {education.map(edu => (
                 <div key={edu.id}>
@@ -655,7 +892,7 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
         )}
         {skills.length > 0 && (
           <div>
-            <h2 className="text-xs font-black uppercase tracking-widest text-brand-600 mb-2">{t.skills}</h2>
+            <h2 className="text-xs font-black uppercase tracking-widest mb-2" style={{ color: themeColor }}>{t.skills}</h2>
             <div className="flex flex-wrap gap-1">
               {skills.map((skill, i) => (
                 <span key={i} className={`text-[10px] border border-neutral-200 px-2 py-0.5 rounded ${textSafe}`}>{skill}</span>
@@ -676,12 +913,22 @@ export const CompactTemplate = ({ personalInfo, summary, education, experience, 
             </div>
           </div>
         )}
+        {hobbies && hobbies.length > 0 && (
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-widest text-brand-600 mb-2">{t.hobbies}</h2>
+            <div className="flex flex-wrap gap-1">
+              {hobbies.map((hobby, i) => (
+                <span key={i} className={`text-[10px] border border-neutral-200 px-2 py-0.5 rounded ${textSafe}`}>{hobby}</span>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   </div>
 );
 
-export const SidebarLightTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const SidebarLightTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, themeColor = '#10b981', t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} flex flex-col md:flex-row font-sans`}>
     <div className="w-full md:w-56 bg-neutral-50 p-8 border-r border-neutral-100 flex flex-col gap-8 shrink-0">
       <div>
@@ -694,11 +941,14 @@ export const SidebarLightTemplate = ({ personalInfo, summary, education, experie
           <p>{personalInfo.email}</p>
           <p>{personalInfo.phone}</p>
           <p>{personalInfo.location}</p>
+          {personalInfo.linkedin && <p className={textSafe}>{personalInfo.linkedin}</p>}
+          {personalInfo.github && <p className={textSafe}>{personalInfo.github}</p>}
+          {personalInfo.portfolio && <p className={textSafe}>{personalInfo.portfolio}</p>}
         </div>
       </div>
       {skills.length > 0 && (
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-600 mb-3">{t.skills}</h2>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: themeColor }}>{t.skills}</h2>
           <div className="flex flex-col gap-1.5">
             {skills.map((skill, i) => (
               <div key={i} className={`text-xs font-medium text-neutral-600 ${textSafe}`}>{skill}</div>
@@ -708,13 +958,23 @@ export const SidebarLightTemplate = ({ personalInfo, summary, education, experie
       )}
       {languages.length > 0 && (
         <div>
-          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-brand-600 mb-3">{t.languages}</h2>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: themeColor }}>{t.languages}</h2>
           <div className="space-y-2">
             {languages.map(lang => (
               <div key={lang.id}>
                 <div className={`text-xs font-bold text-neutral-800 ${textSafe}`}>{lang.language}</div>
                 <div className="text-[10px] text-neutral-400 uppercase">{proficiencyLabel(lang.proficiency, t)}</div>
               </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {hobbies && hobbies.length > 0 && (
+        <div>
+          <h2 className="text-[10px] font-black uppercase tracking-[0.2em] mb-3" style={{ color: themeColor }}>{t.hobbies}</h2>
+          <div className="flex flex-col gap-1.5">
+            {hobbies.map((hobby, i) => (
+              <div key={i} className={`text-xs font-medium text-neutral-600 ${textSafe}`}>{hobby}</div>
             ))}
           </div>
         </div>
@@ -737,7 +997,24 @@ export const SidebarLightTemplate = ({ personalInfo, summary, education, experie
                   <h3 className={`text-lg font-bold text-neutral-900 ${textSafe}`}>{exp.position}</h3>
                   <span className="text-xs font-bold text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
                 </div>
-                <div className={`text-sm font-bold text-brand-600 mb-3 ${textSafe}`}>{exp.company}</div>
+                <div className={`text-sm font-bold mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
+                <p className={`text-sm text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      {volunteering && volunteering.length > 0 && (
+        <div>
+          <h2 className="text-xs font-black uppercase tracking-[0.2em] text-neutral-300 mb-6">{t.volunteering || 'Volunteering'}</h2>
+          <div className="space-y-8">
+            {volunteering.map(exp => (
+              <div key={exp.id}>
+                <div className="flex flex-wrap justify-between items-baseline mb-1 gap-2">
+                  <h3 className={`text-lg font-bold text-neutral-900 ${textSafe}`}>{exp.position}</h3>
+                  <span className="text-xs font-bold text-neutral-400 whitespace-nowrap">{exp.startDate} — {exp.endDate}</span>
+                </div>
+                <div className={`text-sm font-bold mb-3 ${textSafe}`} style={{ color: themeColor }}>{exp.company}</div>
                 <p className={`text-sm text-neutral-600 leading-relaxed ${textSafe}`}>{exp.description}</p>
               </div>
             ))}
@@ -764,13 +1041,18 @@ export const SidebarLightTemplate = ({ personalInfo, summary, education, experie
   </div>
 );
 
-export const HighContrastTemplate = ({ personalInfo, summary, education, experience, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
+export const HighContrastTemplate = ({ personalInfo, summary, education, experience, volunteering, skills, hobbies, languages, t, resumeRef }: TemplateProps) => (
   <div ref={resumeRef} className={`${templateRoot} p-8 md:p-12 font-mono text-black border-[8px] border-black`}>
     <div className="border-b-8 border-black pb-6 mb-10 flex flex-wrap justify-between items-end gap-4">
       <div className="min-w-0 flex-1">
         <h1 className={`text-3xl md:text-5xl font-black uppercase mb-4 tracking-tighter ${textSafe}`}>{personalInfo.firstName} {personalInfo.lastName}</h1>
         <div className={`text-sm font-bold uppercase tracking-widest ${textSafe}`}>
           {personalInfo.email} // {personalInfo.phone} // {personalInfo.location}
+          {(personalInfo.linkedin || personalInfo.github || personalInfo.portfolio) && (
+            <div className={`mt-1 font-mono text-[10px] text-brand-300 ${textSafe}`}>
+              {[personalInfo.linkedin, personalInfo.github, personalInfo.portfolio].filter(Boolean).join(' // ')}
+            </div>
+          )}
         </div>
       </div>
       {personalInfo.photo && (
@@ -793,6 +1075,24 @@ export const HighContrastTemplate = ({ personalInfo, summary, education, experie
               <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.experience}</h2>
               <div className="space-y-6">
                 {experience.map(exp => (
+                  <div key={exp.id} className="border-b-2 border-black pb-4">
+                    <div className="flex flex-wrap justify-between font-black text-lg mb-1 gap-2">
+                      <span className={textSafe}>{exp.position}</span>
+                      <span className="whitespace-nowrap">{exp.startDate} &gt; {exp.endDate}</span>
+                    </div>
+                    <div className={`font-bold mb-3 uppercase tracking-widest underline ${textSafe}`}>{exp.company}</div>
+                    <p className={`leading-tight ${textSafe}`}>{exp.description}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {volunteering && volunteering.length > 0 && (
+            <div>
+              <h2 className="text-lg font-black uppercase bg-black text-white px-4 py-1 mb-6 inline-block">{t.volunteering || 'Volunteering'}</h2>
+              <div className="space-y-6">
+                {volunteering.map(exp => (
                   <div key={exp.id} className="border-b-2 border-black pb-4">
                     <div className="flex flex-wrap justify-between font-black text-lg mb-1 gap-2">
                       <span className={textSafe}>{exp.position}</span>

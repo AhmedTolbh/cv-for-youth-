@@ -4,7 +4,7 @@ import { useStore } from '../store/useStore';
 import { translations } from '../i18n';
 import Layout from '../components/Layout';
 import * as Templates from '../components/Templates';
-import { Download, ChevronLeft, Layout as LayoutIcon, FileText, Printer, Loader2, Globe } from 'lucide-react';
+import { Download, ChevronLeft, Layout as LayoutIcon, FileText, Printer, Loader2, Globe, Briefcase } from 'lucide-react';
 import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, BorderStyle, TabStopPosition, TabStopType } from 'docx';
 import { saveAs } from 'file-saver';
 
@@ -16,20 +16,40 @@ export default function PreviewPage() {
     const {
         appLanguage,
         resumeLanguage,
+        ageGroup,
         personalInfo,
         summary,
         education,
         experience,
+        volunteering,
         skills,
         hobbies,
         languages,
         template,
+        themeColor,
         setTemplate,
         setResumeLanguage
     } = useStore();
 
     const t = translations[appLanguage];
     const tResume = translations[resumeLanguage];
+
+    // Build intelligent Job Search query based on their actual CV data
+    const searchTerms = [
+        experience[0]?.position,
+        skills[0],
+        skills[1]
+    ].filter(Boolean);
+
+    // Use up to 2 unique matching terms from their CV for an accurate broad search
+    const uniqueTerms = Array.from(new Set(searchTerms)).slice(0, 2).join(' ');
+
+    // Only use a fallback if their CV contains absolutely no experience or skills
+    const fallbackTerm = ageGroup === 'under18' ? 'kesätyö' : 'avoimet työpaikat';
+    const finalQuery = uniqueTerms || fallbackTerm;
+
+    const jobSearchQuery = encodeURIComponent(finalQuery);
+    const jobSearchUrl = `https://duunitori.fi/tyopaikat?haku=${jobSearchQuery}${personalInfo.location ? `&alue=${encodeURIComponent(personalInfo.location)}` : ''}`;
 
     const templateOptions = [
         { id: 'modern', name: t.modern },
@@ -452,6 +472,23 @@ ${resumeHTML}
                         </button>
                     </div>
 
+                    {/* Find Jobs Button */}
+                    <div className="pt-6 border-t border-slate-200 mt-6">
+                        <a
+                            href={jobSearchUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-full relative overflow-hidden group bg-emerald-600 text-white rounded-2xl p-4 flex flex-col items-center justify-center transition-all hover:bg-emerald-700 shadow-lg hover:shadow-emerald-600/20"
+                        >
+                            <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <div className="flex items-center gap-2 font-bold text-lg mb-1">
+                                <Briefcase size={22} className="text-emerald-200" />
+                                {t.findJobs}
+                            </div>
+                            <span className="text-emerald-100 text-sm">{t.findJobsDesc}</span>
+                        </a>
+                    </div>
+
                     <button
                         onClick={() => navigate('/builder')}
                         className="flex items-center gap-2 text-slate-500 hover:text-slate-900 transition-colors px-6"
@@ -469,9 +506,11 @@ ${resumeHTML}
                                 summary={summary}
                                 education={education}
                                 experience={experience}
+                                volunteering={volunteering}
                                 skills={skills}
                                 hobbies={hobbies}
                                 languages={languages}
+                                themeColor={themeColor}
                                 t={tResume}
                             />
                         </div>

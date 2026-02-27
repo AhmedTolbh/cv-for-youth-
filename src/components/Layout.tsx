@@ -1,7 +1,8 @@
 import React from 'react';
 import { useStore } from '../store/useStore';
 import { translations } from '../i18n';
-import Logo from '../photo/Helsinki_logo.png';
+import { Logo } from './Logo';
+import { Link } from 'react-router-dom';
 import { Globe, Shield, Info } from 'lucide-react';
 
 interface LayoutProps {
@@ -18,12 +19,12 @@ export default function Layout({ children }: LayoutProps) {
 
             <header className="sticky top-0 z-50 glass border-b border-slate-200 px-6 py-4">
                 <div className="max-w-7xl mx-auto flex justify-between items-center">
-                    <div className="flex items-center gap-3">
-                        <img src={Logo} alt="Helsinki Logo" className="h-10 w-auto" />
+                    <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer">
+                        <Logo className="h-10 w-auto" />
                         <span className="text-xl font-bold tracking-tight text-slate-900 hidden md:block">
                             {t.welcome.split(' ').slice(2).join(' ')}
                         </span>
-                    </div>
+                    </Link>
 
                     <button
                         onClick={() => {
@@ -47,7 +48,7 @@ export default function Layout({ children }: LayoutProps) {
                 <div className="max-w-7xl mx-auto flex flex-col items-center gap-5">
                     <div className="flex items-center gap-2 text-slate-500 font-medium">
                         <span>{appLanguage === 'fi' ? 'tehty rakkaudella' : 'made with love in'}</span>
-                        <img src={Logo} alt="Helsinki Logo" className="h-8 w-auto inline-block" />
+                        <Logo className="h-8 w-auto inline-block" />
                     </div>
                     <div className="flex items-center gap-2 text-emerald-600 text-sm font-medium">
                         <Shield size={14} />
